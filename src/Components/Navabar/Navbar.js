@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 import './Navbar.css';
 
-export const Navbar = () => {
+const Navbar = () => {
   return (
     <div>
       <nav>
     <div className="nav__logo">
       <a href="/">
         StayHealthy 
-        <svg xmlns="http://www.w3.org/2000/svg" height="26" width="26" viewBox="0 0 1000 1000" style="fill:#3685fb">
+        <svg xmlns="http://www.w3.org/2000/svg" height="26" width="26" viewBox="0 0 1000 1000" >
             <title>Doctor With Stethoscope SVG icon</title>
             <g>
                 <g>
@@ -21,7 +21,7 @@ export const Navbar = () => {
       </a>
       <span>.</span>
     </div>
-    <div className="nav__icon" onClick={handleClick}>
+    <div className="nav__icon">
       <i className="fa fa-times fa fa-bars"></i>
     </div>
 
@@ -30,7 +30,7 @@ export const Navbar = () => {
         <a href="../Landing_Page/LandingPage.html">Home</a>
       </li>
       <li className="link">
-        <a href="#">Appointments</a>
+        <a href="/">Appointments</a>
       </li>
       <li className="link">
         <a href="../Sign_Up//Sign_Up.html">
@@ -47,3 +47,5 @@ export const Navbar = () => {
 </div>
   )
 }
+
+export default Navbar;
