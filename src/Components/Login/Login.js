@@ -1,47 +1,94 @@
-import React from 'react';
-import './Login.css';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 
 const Login = () => {
+
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("auth-token")) {
+      navigate("/");
+    }
+  }, []);
+
+  const login = async (e) => {
+    e.preventDefault();
+    const res = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+
+    const json = await res.json();
+    if (json.authtoken) {
+      sessionStorage.setItem('auth-token', json.authtoken);
+      sessionStorage.setItem('email', email);
+
+      navigate('/');
+      window.location.reload();
+    } else {
+      if (json.errors) {
+        for (const error of json.errors) {
+          alert(error.msg);
+        }
+      } else {
+        alert(json.error);
+      }
+    }
+  };
+
   return (
-    <div class="container">
-        <div class="login-grid">
-          <div class="login-text">
+    <div>
+      <div className="container">
+        <div className="login-grid">
+          <div className="login-text">
             <h2>Login</h2>
           </div>
-          <div class="login-text">
-            Are you a new member? <span><a href="../Sign_Up/Sign_Up.html" style="color: #2190FF;"> Sign Up Here</a></span>
+          <div className="login-text">
+            Are you a new member? 
+            <span>
+              <Link to="/signup" style={{ color: '#2190FF' }}>
+                Sign Up Here
+              </Link>
+            </span>
           </div>
           <br />
-          <div class="login-form">
-            <form>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" aria-describedby="helpId" />
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  class="form-control"
-                  placeholder="Enter your password"
-                  aria-describedby="helpId"
+          <div className="login-form">
+            <form onSubmit={login}>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  type="email" 
+                  name="email" 
+                  id="email" 
+                  className="form-control" 
+                  placeholder="Enter your email" 
+                  aria-describedby="helpId" 
                 />
               </div>
-              <div class="btn-group">
-                <button type="submit" class="btn btn-primary mb-2 mr-1 waves-effect waves-light">Login</button> 
-                <button type="reset" class="btn btn-danger mb-2 waves-effect waves-light">Reset</button>
-              </div>
-              <br />
-              <div class="login-text">
-                Forgot Password?
+              // write logic code for password input box
+              <div className="btn-group">
+                <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">
+                  Login
+                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
+    </div>
   )
 }
 
-export default Login
+export default Login;
